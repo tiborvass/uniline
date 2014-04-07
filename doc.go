@@ -11,6 +11,7 @@ Most of the usual GNU readline capabilities and control keys are implemented.
 If the provided input source is not a TTY or not an ANSI-compatible TTY, uniline falls back to scanning each line using bufio.ScanLines.
 
 Features
+	Unicode
 	Optional History (search coming soon)
 	Fallback for non-TTY or Dumb terminals
 	Single line editing (multiline coming soon)
