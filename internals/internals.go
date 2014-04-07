@@ -295,15 +295,26 @@ func (i *Internals) Bell() {
 func (i *Internals) Refresh() {
 	buf := i.Buf
 	pos := i.Pos
+	pos2 := utils.Position{}
+	x := buf.ColLen
+
 	for i.Prompt.ColLen+pos.Columns >= i.Cols {
-		c := buf.Chars[0]
-		buf = buf.Slice((utils.Position{}).Add(c))
+		c := buf.Chars[pos2.Runes]
+		pos2 = pos2.Add(c)
 		pos = pos.Subtract(c)
+		x -= c.ColLen
 	}
-	for i.Prompt.ColLen+buf.ColLen >= i.Cols {
-		c := buf.Chars[len(buf.Chars)-1]
-		buf = buf.Slice(utils.Position{}, pos.Subtract(c))
+	pos3 := pos2
+	for pos3.Columns < buf.ColLen {
+		pos3 = pos3.Add(buf.Chars[pos3.Runes])
 	}
+	for i.Prompt.ColLen+x >= i.Cols {
+		c := buf.Chars[pos3.Runes-1]
+		pos3 = pos3.Subtract(c)
+		x -= c.ColLen
+	}
+	buf = buf.Slice(pos2, pos3)
+
 	mustWrite(fmt.Fprintf(i.Output, "%s%s%s%s%s",
 		ansi.CursorToLeftEdge,
 		i.Prompt.Bytes,
