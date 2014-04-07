@@ -16,9 +16,9 @@ type Internals struct {
 	Input  io.Reader
 	Output io.Writer
 	S      *bufio.Scanner
-	H      utils.History
+	H      History
 	Prompt utils.Text
-	Cb     utils.Clipboard
+	Cb     Clipboard
 	Pos    utils.Position
 	Cols   int // number of columns, aka window width
 	Buf    utils.Text
@@ -30,6 +30,17 @@ type Internals struct {
 	// This is used for internal scanning.
 	// Termination of external scanning is handled with the boolean return variable `more`
 	Stop bool
+}
+
+type Clipboard struct {
+	Text    utils.Text
+	Partial bool
+}
+
+type History struct {
+	Saved []string
+	Tmp   []string
+	Index int
 }
 
 func (i *Internals) Insert(c utils.Char) {

@@ -5,12 +5,12 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/tiborvass/uniline/utils"
+	"github.com/tiborvass/uniline/internals"
 )
 
 // ClearHistory Clears history.
 func (s *Scanner) ClearHistory() {
-	s.i.H = utils.History{}
+	s.i.H = internals.History{}
 }
 
 // AddToHistory adds a string line to history

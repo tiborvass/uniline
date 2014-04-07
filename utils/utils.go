@@ -1,3 +1,7 @@
+// Package utils is an attempt to work with []byte and []rune at the same time while
+// preserving information about character width in a terminal.
+//
+// TODO: improve on this poor design.
 package utils
 
 import "github.com/shinichy/go-wcwidth"
@@ -143,15 +147,4 @@ func (pos Position) Subtract(chars ...Char) Position {
 		pos.Columns -= c.ColLen
 	}
 	return pos
-}
-
-type Clipboard struct {
-	Text    Text
-	Partial bool
-}
-
-type History struct {
-	Saved []string
-	Tmp   []string
-	Index int
 }

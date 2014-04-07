@@ -8,6 +8,7 @@ import (
 	"unicode"
 
 	"github.com/dotcloud/docker/pkg/term"
+	. "github.com/tiborvass/file.debug"
 	"github.com/tiborvass/uniline/ansi"
 	"github.com/tiborvass/uniline/internals"
 	"github.com/tiborvass/uniline/keymap"
@@ -178,6 +179,7 @@ func (s *Scanner) Scan(prompt string) (more bool) {
 	s.i.S.Split(bufio.ScanRunes)
 
 	var p []byte
+
 	for !s.i.Stop && s.i.S.Scan() {
 
 		var r rune
@@ -208,7 +210,7 @@ func (s *Scanner) Scan(prompt string) (more bool) {
 				continue
 			}
 
-			debug("r: %v", r)
+			Debug("r: %v", r)
 
 			if isCompleteAnsiCode() {
 				// moving on to next rune
@@ -226,10 +228,10 @@ func (s *Scanner) Scan(prompt string) (more bool) {
 			// In the case where p is an escape sequence, add current bytes to previous and try a lookup
 
 			p = append(p, s.i.S.Bytes()...)
-			debug("p: %v", p)
+			Debug("p: %v", p)
 			if isCompleteAnsiCode() {
 				p = nil
-				debug("done")
+				Debug("done")
 			}
 		}
 	}
