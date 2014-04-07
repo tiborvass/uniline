@@ -10,14 +10,65 @@ It allows users to interactively input and edit a line from the terminal.
 Most of the usual GNU readline capabilities and control keys are implemented.
 If the provided input source is not a TTY or not an ANSI-compatible TTY, uniline falls back to scanning each line using bufio.ScanLines.
 
+Features
+	Optional History (search coming soon)
+	Fallback for non-TTY or Dumb terminals
+	Single line editing (multiline coming soon)
+
+Supported Keys
+	Left / Ctrl-B
+	Right / Ctrl-F
+	Up / Ctrl-P
+	Down / Ctrl-N
+
+	Meta-Left
+	Meta-Right
+
+	Backspace / Ctrl-H
+	Delete
+	Ctrl-A
+	Ctrl-E
+
+	Ctrl-T
+	Ctrl-W
+	Ctrl-K
+	Ctrl-U
+	Ctrl-Y
+	Ctrl-L
+
+	Ctrl-C
+	Ctrl-D
+
+Echo Example (available in example/echo.go):
+
+	package main
+
+	import (
+		"fmt"
+		"github.com/tiborvass/uniline"
+	)
+
+	func main() {
+		prompt := "> "
+		scanner := uniline.DefaultScanner()
+		for scanner.Scan(prompt) {
+			line := scanner.Text()
+			if len(line) > 0 {
+				scanner.AddToHistory(line)
+				fmt.Println(line)
+			}
+		}
+		if err := scanner.Err(); err != nil {
+			panic(err)
+		}
+	}
+
+
 TODO:
+	Multiline
+	History search
+	Tab completion
+	Catch SIGWINCH when window resizes
 
-- add support for multiline
-
-- add support for History search
-
-- add support for tab completion
-
-- catch SIGWINCH and adjust cols
 */
 package uniline
