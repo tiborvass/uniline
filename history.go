@@ -4,19 +4,17 @@ import (
 	"bufio"
 	"fmt"
 	"os"
-
-	"github.com/tiborvass/uniline/internals"
 )
 
 // ClearHistory Clears history.
 func (s *Scanner) ClearHistory() {
-	s.i.H = internals.History{}
+	s.history = history{}
 }
 
 // AddToHistory adds a string line to history
 func (s *Scanner) AddToHistory(line string) {
-	s.i.H.Tmp = append(s.i.H.Tmp, line)
-	s.i.H.Saved = append(s.i.H.Saved, line)
+	s.history.tmp = append(s.history.tmp, line)
+	s.history.saved = append(s.history.saved, line)
 }
 
 // SaveHistory saves the current history to a file specified by filename.
@@ -26,7 +24,7 @@ func (s *Scanner) SaveHistory(filename string) error {
 		return err
 	}
 	defer f.Close()
-	for _, line := range s.i.H.Tmp[:len(s.i.H.Tmp)-1] {
+	for _, line := range s.history.tmp[:len(s.history.tmp)-1] {
 		if _, err := fmt.Fprintln(f, line); err != nil {
 			return err
 		}
@@ -51,12 +49,12 @@ func (s *Scanner) LoadHistory(filename string) error {
 	}
 
 	// tmp = saved = loaded History
-	s.i.H.Saved = lines
-	s.i.H.Tmp = make([]string, len(s.i.H.Saved))
-	copy(s.i.H.Tmp, s.i.H.Saved)
+	s.history.saved = lines
+	s.history.tmp = make([]string, len(s.history.saved))
+	copy(s.history.tmp, s.history.saved)
 
 	// add current line
-	s.i.H.Tmp = append(s.i.H.Tmp, s.i.Buf.String())
-	s.i.H.Index = len(s.i.H.Tmp) - 1
+	s.history.tmp = append(s.history.tmp, s.buf.String())
+	s.history.index = len(s.history.tmp) - 1
 	return nil
 }
