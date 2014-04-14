@@ -40,7 +40,7 @@ Supported Keys
 	Ctrl-C
 	Ctrl-D
 
-Echo Example (available in example/echo.go):
+Echo Example (available in examples/echo/echo.go):
 
 	package main
 
