@@ -11,7 +11,7 @@ ANSI-compatible TTY, uniline falls back to scanning each line using
 
 ### With Go
 
-```Go
+```Shell
 go get github.com/tiborvass/uniline
 ```
 
