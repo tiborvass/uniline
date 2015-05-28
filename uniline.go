@@ -83,7 +83,7 @@ func NewScanner(input io.Reader, output io.Writer, onInterrupt func(s *Scanner) 
 	fd := f.Fd()
 	s.fd = &fd
 	t := os.Getenv("TERM")
-	s.dumb = !terminal.IsTerminal(fd) || len(t) == 0 || t == "dumb" || t == "cons25"
+	s.dumb = !terminal.IsTerminal(int(fd)) || len(t) == 0 || t == "dumb" || t == "cons25"
 	return s
 }
 
@@ -150,21 +150,21 @@ func (s *Scanner) Scan(prompt string) (more bool) {
 		// continue scanning if no error
 		return s.err == nil
 	}
-	state, err := terminal.MakeRaw(*s.fd)
+	state, err := terminal.MakeRaw(int(*s.fd))
 	if err != nil {
 		panic(err)
 	}
 	defer func() {
-		terminal.RestoreTerminal(*s.fd, state)
+		terminal.Restore(int(*s.fd), state)
 	}()
-	winsize, err := terminal.GetSize(*s.fd)
+	winWidth, _, err := terminal.GetSize(int(*s.fd))
 	if err != nil {
 		panic(err)
 	}
 
 	s.buf = text{}
 	s.pos = position{}
-	s.cols = int(winsize.Width)
+	s.cols = int(winWidth)
 
 	// create new empty temporary element in History
 	s.history.tmp = append(s.history.tmp, "")
