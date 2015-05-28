@@ -15,6 +15,10 @@ ANSI-compatible TTY, uniline falls back to scanning each line using
 go get github.com/tiborvass/uniline
 ```
 
+## Documentation
+
+[https://godoc.org/github.com/tiborvass/uniline](https://godoc.org/github.com/tiborvass/uniline)
+
 ## Example
 
 ```Go
