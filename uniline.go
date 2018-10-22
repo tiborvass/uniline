@@ -78,7 +78,7 @@ func NewScanner(input io.Reader, output io.Writer, onInterrupt func(s *Scanner) 
 			return s
 		}
 	}
-	s.output = input.(io.Writer) // does not panic, since *os.File implements io.Writer
+	s.output = output.(io.Writer) // does not panic, since *os.File implements io.Writer
 
 	fd := f.Fd()
 	s.fd = &fd
