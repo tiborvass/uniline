@@ -78,7 +78,7 @@ func NewScanner(input io.Reader, output io.Writer, onInterrupt func(s *Scanner) 
 			return s
 		}
 	}
-	s.output = input.(io.Writer) // does not panic, since *os.File implements io.Writer
+	s.output = output.(io.Writer) // does not panic, since *os.File implements io.Writer
 
 	fd := f.Fd()
 	s.fd = &fd
@@ -128,14 +128,17 @@ func (s *Scanner) Scan(prompt string) (more bool) {
 	// no need to initialize internal scanner more than once
 	if s.scanner == nil {
 		s.scanner = bufio.NewScanner(s.input)
+	    if s.dumb {
+		    s.scanner.Split(bufio.ScanLines)
+        } else {
+            s.scanner.Split(bufio.ScanRunes)
+        }
 	}
 
 	s.prompt = textFromString(prompt)
 	s.stop = false
 
 	if s.dumb {
-		s.scanner.Split(bufio.ScanLines)
-
 		if _, err := fmt.Fprint(s.output, string(s.prompt.bytes)); err != nil {
 			panic(err)
 		}
@@ -172,7 +175,6 @@ func (s *Scanner) Scan(prompt string) (more bool) {
 	s.history.index = len(s.history.tmp) - 1
 
 	s.output.Write(s.prompt.bytes)
-	s.scanner.Split(bufio.ScanRunes)
 
 	var p []byte
 
